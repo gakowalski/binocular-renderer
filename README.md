@@ -32,8 +32,6 @@ M5 provides a desktop-first affine calibration viewer with persistent profiles a
 
 Profile JSON stores calibration parameters and session/display metadata only. Loaded source images are never embedded in saved profiles. Stereopair source assignment is deliberately separate from per-eye calibration state.
 
-Browser source references in `index.html` use relative `./src/...` paths so the development entry page does not assume deployment at the web-server root.
-
 ## Development
 
 Requirements: a current Node.js LTS release and npm.
@@ -42,6 +40,8 @@ Requirements: a current Node.js LTS release and npm.
 npm install
 npm run dev
 ```
+
+Vite must be used during development because the source application is TypeScript. The repository root is not a deployable static web root.
 
 Verification:
 
@@ -53,6 +53,21 @@ npm run build
 
 The application is intentionally desktop-first. Browser zoom should preferably remain at 100% during controlled experiments.
 
+## Production deployment
+
+Build first:
+
+```bash
+npm install
+npm run build
+```
+
+Then serve **only the contents of `dist/`** through Apache, Nginx or another static server. Do not serve the repository-root `index.html` directly: it references TypeScript source that requires Vite processing.
+
+Production assets use relative URLs (`base: './'`), so the built site can be hosted at the server root or in a subdirectory. CI also uploads the verified `dist/` directory as the `binocular-renderer-dist` artifact.
+
+See `docs/DEPLOYMENT.md` for Apache/Nginx examples and troubleshooting.
+
 ## Documentation
 
 Project semantics and agent instructions live in:
@@ -63,4 +78,5 @@ Project semantics and agent instructions live in:
 - `docs/CALIBRATION.md`
 - `docs/PROFILE_SCHEMA.md`
 - `docs/STEREO_WORKFLOW.md`
+- `docs/DEPLOYMENT.md`
 - `docs/ROADMAP.md`

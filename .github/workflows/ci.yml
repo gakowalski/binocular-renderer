@@ -30,10 +30,25 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Verify relative production assets
+      - name: Verify deployable production output
         run: |
           grep -q 'src="./assets/' dist/index.html
           if grep -Eq '(src|href)="/assets/' dist/index.html; then
             echo "Absolute production asset path found in dist/index.html"
             exit 1
           fi
+          if grep -Eq '(src|href)="[^\"]*\.ts([?\"#]|$)' dist/index.html; then
+            echo "TypeScript source reference found in dist/index.html"
+            exit 1
+          fi
+          if find dist -type f -name '*.ts' | grep -q .; then
+            echo "TypeScript source file found in deployable dist/ output"
+            exit 1
+          fi
+
+      - name: Upload deployable static site
+        uses: actions/upload-artifact@v4
+        with:
+          name: binocular-renderer-dist
+          path: dist/
+          if-no-files-found: error
