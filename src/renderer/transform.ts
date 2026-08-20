@@ -1,5 +1,6 @@
 export type Side = 'left' | 'right';
 export type TranslationAxis = 'offsetX' | 'offsetY';
+export type ScaleAxis = 'scaleX' | 'scaleY';
 export type TranslationLinkMode = 'independent' | 'symmetric';
 
 export interface ViewTransform {
@@ -18,6 +19,12 @@ export interface BinocularTransforms {
 export interface RelativeTranslation {
   offsetX: number;
   offsetY: number;
+}
+
+export interface RelativeAffine {
+  rotationDeg: number;
+  scaleXRatio: number;
+  scaleYRatio: number;
 }
 
 export const NEUTRAL_VIEW_TRANSFORM: Readonly<ViewTransform> = Object.freeze({
@@ -43,6 +50,14 @@ export function getRelativeTranslation(transforms: BinocularTransforms): Relativ
   return {
     offsetX: transforms.right.offsetX - transforms.left.offsetX,
     offsetY: transforms.right.offsetY - transforms.left.offsetY,
+  };
+}
+
+export function getRelativeAffine(transforms: BinocularTransforms): RelativeAffine {
+  return {
+    rotationDeg: transforms.right.rotationDeg - transforms.left.rotationDeg,
+    scaleXRatio: safeScaleRatio(transforms.right.scaleX, transforms.left.scaleX),
+    scaleYRatio: safeScaleRatio(transforms.right.scaleY, transforms.left.scaleY),
   };
 }
 
@@ -83,6 +98,34 @@ export function nudgeTranslation(
   );
 }
 
+export function setRotationValue(
+  transforms: BinocularTransforms,
+  side: Side,
+  rotationDeg: number,
+): BinocularTransforms {
+  const next = cloneTransforms(transforms);
+  next[side].rotationDeg = rotationDeg;
+  return next;
+}
+
+export function setScaleValue(
+  transforms: BinocularTransforms,
+  side: Side,
+  axis: ScaleAxis,
+  value: number,
+  uniform: boolean,
+): BinocularTransforms {
+  const next = cloneTransforms(transforms);
+  next[side][axis] = value;
+
+  if (uniform) {
+    const otherAxis: ScaleAxis = axis === 'scaleX' ? 'scaleY' : 'scaleX';
+    next[side][otherAxis] = value;
+  }
+
+  return next;
+}
+
 export function viewTransformToCss(transform: ViewTransform): string {
   return [
     `translate3d(${formatNumber(transform.offsetX)}px, ${formatNumber(transform.offsetY)}px, 0)`,
@@ -96,6 +139,10 @@ function cloneTransforms(transforms: BinocularTransforms): BinocularTransforms {
     left: { ...transforms.left },
     right: { ...transforms.right },
   };
+}
+
+function safeScaleRatio(numerator: number, denominator: number): number {
+  return denominator === 0 ? Number.NaN : numerator / denominator;
 }
 
 function formatNumber(value: number): string {
