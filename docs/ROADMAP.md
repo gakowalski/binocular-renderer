@@ -2,7 +2,7 @@
 
 ## M0 — Repository bootstrap
 
-Status: current
+Status: complete
 
 Deliverables:
 
@@ -15,6 +15,8 @@ Deliverables:
 Exit criterion: Codex/Copilot can implement the project without inventing core parameter semantics.
 
 ## M1 — Two-panel viewer
+
+Status: implemented in `codex/m1-two-panel-viewer`, pending review
 
 Deliverables:
 
