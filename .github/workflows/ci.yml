@@ -29,3 +29,11 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Verify relative production assets
+        run: |
+          grep -q 'src="./assets/' dist/index.html
+          if grep -Eq '(src|href)="/assets/' dist/index.html; then
+            echo "Absolute production asset path found in dist/index.html"
+            exit 1
+          fi
