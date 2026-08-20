@@ -6,10 +6,15 @@ The project explores displaying and transforming paired images so that binocular
 
 ## Current milestone
 
-M4 provides a desktop-first affine calibration viewer with persistent local profiles:
+M5 provides a desktop-first affine calibration viewer with persistent profiles and a dedicated stereopair workflow:
 
 - left and right viewports
 - independent local image loading for each side
+- two-file stereopair loading in one action
+- source-only left/right swapping while per-eye calibration stays fixed
+- common image `contain`, `cover` and `fill` modes
+- common crop-position controls
+- built-in generated zero-disparity, horizontal-disparity, vertical-mismatch and scale-mismatch pairs
 - horizontal and vertical translation
 - per-view rotation
 - per-view `scaleX` and `scaleY`
@@ -25,7 +30,9 @@ M4 provides a desktop-first affine calibration viewer with persistent local prof
 - session notes and optional viewing-distance metadata
 - no backend and no image upload
 
-Profile JSON stores calibration parameters and session/display metadata only. Loaded source images are never embedded in saved profiles.
+Profile JSON stores calibration parameters and session/display metadata only. Loaded source images are never embedded in saved profiles. Stereopair source assignment is deliberately separate from per-eye calibration state.
+
+Browser source references in `index.html` use relative `./src/...` paths so the development entry page does not assume deployment at the web-server root.
 
 ## Development
 
@@ -55,4 +62,5 @@ Project semantics and agent instructions live in:
 - `docs/VISION_MODEL.md`
 - `docs/CALIBRATION.md`
 - `docs/PROFILE_SCHEMA.md`
+- `docs/STEREO_WORKFLOW.md`
 - `docs/ROADMAP.md`
