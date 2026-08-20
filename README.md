@@ -6,16 +6,20 @@ The project explores displaying and transforming paired images so that binocular
 
 ## Current milestone
 
-M1 provides a desktop-first two-panel viewer with:
+M3 provides a desktop-first affine calibration viewer with:
 
 - left and right viewports
-- identical generated central cross targets
 - independent local image loading for each side
-- one-click target restore and full reset
+- horizontal and vertical translation
+- per-view rotation
+- per-view `scaleX` and `scaleY`
+- optional uniform scale linking (`X = Y`) per view
+- independent and symmetric translation editing
+- derived relative translation, rotation and scale values
+- generated cross, grid, frame and radial calibration targets
+- keyboard translation nudging
 - browser fullscreen mode
 - no backend and no image upload
-
-Geometric calibration controls begin in M2.
 
 ## Development
 
@@ -30,6 +34,7 @@ Verification:
 
 ```bash
 npm run typecheck
+npm test
 npm run build
 ```
 

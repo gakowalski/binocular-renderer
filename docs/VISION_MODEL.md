@@ -30,15 +30,13 @@ scaleY = 1
 
 ## Initial geometric transform
 
-For a source-space point `p = (x, y)` measured relative to the image centre, the initial affine transform is conceptually:
+For a source-space point `p = (x, y)` measured relative to the image centre, the affine transform is conceptually:
 
 ```text
 p' = T(offsetX, offsetY) * R(rotationDeg) * S(scaleX, scaleY) * p
 ```
 
-The implementation must document the exact matrix multiplication order and keep it stable.
-
-Recommended order for the MVP:
+The transform order is stable:
 
 1. centre source coordinates
 2. scale
@@ -46,7 +44,7 @@ Recommended order for the MVP:
 4. translate in display pixels
 5. map to viewport coordinates
 
-Translation therefore remains intuitive and does not rotate with the image.
+Translation therefore remains intuitive and does not rotate or scale with the image.
 
 The browser implementation emits CSS transform functions in this order:
 
@@ -54,7 +52,7 @@ The browser implementation emits CSS transform functions in this order:
 translate3d(...) rotate(...) scale(...)
 ```
 
-CSS applies the rightmost transform first, so the effective geometric order remains scale → rotate → translate.
+CSS applies the rightmost transform first, so the effective geometric order remains scale → rotate → translate. Automated tests protect this ordering from accidental changes.
 
 ## Translation adjustment modes
 
@@ -84,6 +82,41 @@ right.offsetX = -10 px
 
 This preserves the pair's translation midpoint while changing binocular separation. If the pair is already off-centre, symmetric edits preserve the existing midpoint rather than forcing it back to zero.
 
+## Rotation semantics
+
+`rotationDeg` is a per-view clockwise rotation around the centre of the rendered viewport content. Its neutral value is `0 deg`.
+
+Rotation remains independent between left and right views in M3. Relative rotation is defined as:
+
+```text
+relativeRotationDeg = right.rotationDeg - left.rotationDeg
+```
+
+Positive relative rotation therefore means the right view is rotated farther clockwise than the left view.
+
+## Scale semantics
+
+`scaleX` and `scaleY` are dimensionless per-view multipliers around the centre of the rendered viewport content. Their neutral value is `1`.
+
+M3 exposes two editing modes inside each view:
+
+### Uniform scale
+
+When enabled, changing either `scaleX` or `scaleY` sets both axes to the same value. This keeps the aspect ratio unchanged.
+
+### Independent-axis scale
+
+When uniform scale is disabled, `scaleX` and `scaleY` can differ. This allows experimental anisotropic scaling without changing the parameter definitions.
+
+Relative scale is displayed multiplicatively:
+
+```text
+relativeScaleX = right.scaleX / left.scaleX
+relativeScaleY = right.scaleY / left.scaleY
+```
+
+A ratio of `1` means equal scale between the two views; `1.02` means the right view is scaled 2% larger on that axis than the left view.
+
 ## Relative binocular alignment
 
 The application exposes both absolute per-view transforms and derived relative values.
@@ -95,10 +128,12 @@ relativeOffsetX = right.offsetX - left.offsetX
 relativeOffsetY = right.offsetY - left.offsetY
 ```
 
-Likewise:
+For rotation and scale:
 
 ```text
 relativeRotationDeg = right.rotationDeg - left.rotationDeg
+relativeScaleX = right.scaleX / left.scaleX
+relativeScaleY = right.scaleY / left.scaleY
 ```
 
 Derived values are for display/analysis; saved profiles should retain the complete left and right states.
@@ -116,6 +151,17 @@ Shift + Arrow   = 10 px
 ```
 
 Left/right arrows change `offsetX`; up/down arrows change `offsetY`. Keyboard edits obey the current independent/symmetric adjustment mode exactly like slider and numeric edits.
+
+## Calibration target classes
+
+M3 provides four generated targets:
+
+- `cross` — central cross, ring and fixation dot for translation
+- `grid` — regular grid with central axes for scale and gross rotation
+- `frame` — rectangular nested frame for scale/aspect comparison
+- `radial` — radial spokes for detecting small rotational mismatch
+
+Target choice does not alter transform state.
 
 ## Future affine extensions
 
