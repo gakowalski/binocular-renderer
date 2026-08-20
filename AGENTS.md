@@ -84,6 +84,8 @@ Do not couple calibration procedures to a single monitor geometry.
 - Add tests for parameter conversion and transform math.
 - Avoid hidden magic constants.
 - Store version information in serialized calibration profiles.
+- Reject unsupported profile schema versions rather than silently reinterpreting them.
+- Never serialize local source images, object URLs or local file paths into calibration profiles.
 - Keep sample/default profiles separate from user profiles.
 - Do not add a server, database or authentication without a concrete requirement.
 
@@ -105,6 +107,7 @@ Read these before implementing substantial changes:
 - `docs/PROJECT_SPEC.md`
 - `docs/VISION_MODEL.md`
 - `docs/CALIBRATION.md`
+- `docs/PROFILE_SCHEMA.md`
 - `docs/ROADMAP.md`
 
 Update documentation in the same change whenever parameter semantics or architecture changes.
