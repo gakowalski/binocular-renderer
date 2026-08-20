@@ -31,7 +31,7 @@ Exit criterion: two images/targets can be presented reliably side by side in ful
 
 ## M2 — Translation calibration
 
-Status: implemented in `codex/m2-translation-calibration`, pending review
+Status: complete
 
 Deliverables:
 
@@ -44,6 +44,8 @@ Deliverables:
 Exit criterion: a translation-only calibration can be reproduced exactly.
 
 ## M3 — Rotation and scale
+
+Status: implemented in `codex/m3-rotation-scale`, pending review
 
 Deliverables:
 
