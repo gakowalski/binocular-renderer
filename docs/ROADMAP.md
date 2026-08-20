@@ -59,7 +59,7 @@ Exit criterion: affine alignment can be calibrated and reset without drift.
 
 ## M4 — Calibration profiles
 
-Status: implemented in `codex/m4-calibration-profiles`, pending review
+Status: complete
 
 Deliverables:
 
@@ -74,14 +74,18 @@ Exit criterion: multiple calibration runs can be saved, reloaded and compared.
 
 ## M5 — Stereopair workflow
 
+Status: implemented in `codex/m5-stereopair-workflow`, pending review
+
 Deliverables:
 
-- convenient stereopair loader
-- swap left/right views
-- common image sizing/cropping controls
-- side-by-side test library support
+- convenient two-file stereopair loader
+- source-only swap of left/right images
+- common `contain` / `cover` / `fill` presentation
+- common crop-position controls
+- built-in generated stereopairs for zero disparity, horizontal disparity, vertical mismatch and scale mismatch
+- relative `./src/...` browser entry paths for subdirectory-friendly deployment
 
-Exit criterion: arbitrary stereopairs can be evaluated using a saved personalized alignment.
+Exit criterion: arbitrary stereopairs can be evaluated using a saved personalized alignment without reassigning the per-eye calibration state.
 
 ## M6 — Physical geometry and stereo analysis
 
