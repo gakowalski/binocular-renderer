@@ -25,10 +25,12 @@ Keep these concerns separate:
 
 - `calibration`: parameter definitions, presets, persistence and calibration procedures
 - `renderer`: image rendering and geometric/photometric transforms
-- `stereo`: stereopair semantics and depth/disparity manipulation
+- `stereo`: stereopair source assignment, source presentation and later depth/disparity manipulation
 - `ui`: controls and experiment screens
 
 Rendering mathematics must not be embedded directly in UI components.
+
+Source-image assignment and per-eye calibration are separate state. Swapping a stereopair must not silently swap or reinterpret the left/right calibration transforms.
 
 ## Parameter semantics
 
@@ -80,13 +82,14 @@ Do not couple calibration procedures to a single monitor geometry.
 ## Engineering rules
 
 - Keep dependencies minimal.
-- Prefer pure functions for transform calculations.
+- Prefer pure functions for transform calculations and stereopair semantics.
 - Add tests for parameter conversion and transform math.
 - Avoid hidden magic constants.
 - Store version information in serialized calibration profiles.
 - Reject unsupported profile schema versions rather than silently reinterpreting them.
 - Never serialize local source images, object URLs or local file paths into calibration profiles.
 - Keep sample/default profiles separate from user profiles.
+- Use relative browser entry paths when source references must work below the web-server root.
 - Do not add a server, database or authentication without a concrete requirement.
 
 ## Verification before completing work
@@ -108,6 +111,7 @@ Read these before implementing substantial changes:
 - `docs/VISION_MODEL.md`
 - `docs/CALIBRATION.md`
 - `docs/PROFILE_SCHEMA.md`
+- `docs/STEREO_WORKFLOW.md`
 - `docs/ROADMAP.md`
 
 Update documentation in the same change whenever parameter semantics or architecture changes.
