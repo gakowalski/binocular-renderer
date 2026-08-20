@@ -6,7 +6,7 @@ The project explores displaying and transforming paired images so that binocular
 
 ## Current milestone
 
-M3 provides a desktop-first affine calibration viewer with:
+M4 provides a desktop-first affine calibration viewer with persistent local profiles:
 
 - left and right viewports
 - independent local image loading for each side
@@ -19,7 +19,13 @@ M3 provides a desktop-first affine calibration viewer with:
 - generated cross, grid, frame and radial calibration targets
 - keyboard translation nudging
 - browser fullscreen mode
+- versioned calibration profiles in localStorage
+- profile save, update, load, duplicate and delete actions
+- JSON profile export/import
+- session notes and optional viewing-distance metadata
 - no backend and no image upload
+
+Profile JSON stores calibration parameters and session/display metadata only. Loaded source images are never embedded in saved profiles.
 
 ## Development
 
@@ -48,4 +54,5 @@ Project semantics and agent instructions live in:
 - `docs/PROJECT_SPEC.md`
 - `docs/VISION_MODEL.md`
 - `docs/CALIBRATION.md`
+- `docs/PROFILE_SCHEMA.md`
 - `docs/ROADMAP.md`

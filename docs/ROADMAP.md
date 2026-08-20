@@ -45,7 +45,7 @@ Exit criterion: a translation-only calibration can be reproduced exactly.
 
 ## M3 — Rotation and scale
 
-Status: implemented in `codex/m3-rotation-scale`, pending review
+Status: complete
 
 Deliverables:
 
@@ -58,6 +58,8 @@ Deliverables:
 Exit criterion: affine alignment can be calibrated and reset without drift.
 
 ## M4 — Calibration profiles
+
+Status: implemented in `codex/m4-calibration-profiles`, pending review
 
 Deliverables:
 
