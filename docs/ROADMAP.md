@@ -16,7 +16,7 @@ Exit criterion: Codex/Copilot can implement the project without inventing core p
 
 ## M1 — Two-panel viewer
 
-Status: implemented in `codex/m1-two-panel-viewer`, pending review
+Status: complete
 
 Deliverables:
 
@@ -30,6 +30,8 @@ Deliverables:
 Exit criterion: two images/targets can be presented reliably side by side in fullscreen.
 
 ## M2 — Translation calibration
+
+Status: implemented in `codex/m2-translation-calibration`, pending review
 
 Deliverables:
 

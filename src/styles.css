@@ -24,14 +24,20 @@ body {
 }
 
 button,
-.file-button {
-  min-height: 34px;
+.file-button,
+select,
+input[type="number"] {
   border: 1px solid #4b5563;
   border-radius: 6px;
-  padding: 6px 12px;
   color: #f9fafb;
   background: #1f2937;
   font: inherit;
+}
+
+button,
+.file-button {
+  min-height: 34px;
+  padding: 6px 12px;
   font-size: 13px;
   cursor: pointer;
 }
@@ -42,9 +48,16 @@ button:hover,
 }
 
 button:focus-visible,
-.file-button:focus-visible {
+.file-button:focus-visible,
+select:focus-visible,
+input:focus-visible {
   outline: 2px solid #f9fafb;
   outline-offset: 2px;
+}
+
+button[aria-pressed="true"] {
+  border-color: #d4d4d4;
+  background: #4b5563;
 }
 
 [hidden] {
@@ -53,7 +66,7 @@ button:focus-visible,
 
 .app-shell {
   display: grid;
-  grid-template-rows: 52px minmax(0, 1fr) 30px;
+  grid-template-rows: 52px minmax(0, 1fr) auto 30px;
   width: 100vw;
   height: 100dvh;
   background: #050505;
@@ -113,6 +126,12 @@ button:focus-visible,
   min-width: 0;
   min-height: 0;
   background: #000000;
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: box-shadow 100ms ease;
+}
+
+.view--active {
+  box-shadow: inset 0 0 0 1px #737373;
 }
 
 .view__heading {
@@ -143,6 +162,14 @@ button:focus-visible,
   min-height: 0;
   overflow: hidden;
   background: #000000;
+  cursor: crosshair;
+}
+
+.view__content {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
 
 .view__image {
@@ -201,6 +228,143 @@ button:focus-visible,
   border-radius: 50%;
   background: #ffffff;
   transform: translate(-50%, -50%);
+}
+
+.calibration-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.55fr) minmax(0, 1fr);
+  gap: 12px;
+  border-top: 1px solid #252525;
+  padding: 10px 12px;
+  background: #0b0b0b;
+}
+
+.translation-controls {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid #2d2d2d;
+  border-radius: 7px;
+  padding: 8px 10px 10px;
+}
+
+.translation-controls legend {
+  padding: 0 6px;
+  color: #d4d4d4;
+  font-size: 12px;
+}
+
+.axis-control {
+  display: grid;
+  grid-template-columns: 20px minmax(120px, 1fr) 104px;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+}
+
+.axis-control > label {
+  color: #d4d4d4;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.axis-control input[type="range"] {
+  width: 100%;
+  margin: 0;
+}
+
+.number-with-unit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 5px;
+}
+
+.number-with-unit input {
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  padding: 4px 6px;
+  text-align: right;
+}
+
+.number-with-unit span {
+  color: #a3a3a3;
+  font-size: 11px;
+}
+
+.calibration-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "mode relative"
+    "active active";
+  gap: 8px 12px;
+  align-content: center;
+}
+
+.calibration-summary__mode {
+  grid-area: mode;
+  display: grid;
+  gap: 5px;
+}
+
+.calibration-summary__mode label,
+.relative-values > span,
+.active-side > span {
+  color: #a3a3a3;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.calibration-summary__mode select {
+  width: 100%;
+  height: 30px;
+  padding: 3px 6px;
+  font-size: 12px;
+}
+
+.relative-values {
+  grid-area: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 10px;
+  align-items: end;
+}
+
+.relative-values > span {
+  grid-column: 1 / -1;
+}
+
+.relative-values strong {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.active-side {
+  grid-area: active;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.active-side__buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.active-side__buttons button {
+  min-height: 28px;
+  padding: 3px 9px;
+  font-size: 11px;
+}
+
+.active-side small {
+  justify-self: end;
+  color: #737373;
+  font-size: 10px;
+  white-space: nowrap;
 }
 
 .statusbar {
