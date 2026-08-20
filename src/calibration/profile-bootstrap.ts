@@ -2,6 +2,8 @@ import { setupProfileUi, type LiveCalibrationState } from './profile-ui';
 import type { CalibrationProfile, ProfileTargetType } from './profile';
 import type { Side, TranslationLinkMode, ViewTransform } from '../renderer/transform';
 
+requiredElement<HTMLElement>('.toolbar__identity span').textContent = 'M4 · calibration profiles';
+
 setupProfileUi({
   appVersion: '0.4.0',
   getState: readCalibrationState,
