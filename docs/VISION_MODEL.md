@@ -48,9 +48,45 @@ Recommended order for the MVP:
 
 Translation therefore remains intuitive and does not rotate with the image.
 
+The browser implementation emits CSS transform functions in this order:
+
+```text
+translate3d(...) rotate(...) scale(...)
+```
+
+CSS applies the rightmost transform first, so the effective geometric order remains scale → rotate → translate.
+
+## Translation adjustment modes
+
+M2 defines two explicit interaction modes. These modes affect editing behavior only; they do not change the meaning of stored `offsetX` or `offsetY` values.
+
+### Independent
+
+Changing a value for one view changes only that view.
+
+### Linked (symmetric)
+
+Changing a translation value for one view by `Δ` changes the opposite view by `−Δ` on the same axis.
+
+For example, starting from neutral values:
+
+```text
+left.offsetX  = 0
+right.offsetX = 0
+```
+
+setting the left value to `+10 px` in symmetric mode produces:
+
+```text
+left.offsetX  = +10 px
+right.offsetX = -10 px
+```
+
+This preserves the pair's translation midpoint while changing binocular separation. If the pair is already off-centre, symmetric edits preserve the existing midpoint rather than forcing it back to zero.
+
 ## Relative binocular alignment
 
-The application should expose both absolute per-view transforms and derived relative values.
+The application exposes both absolute per-view transforms and derived relative values.
 
 For translation:
 
@@ -66,6 +102,20 @@ relativeRotationDeg = right.rotationDeg - left.rotationDeg
 ```
 
 Derived values are for display/analysis; saved profiles should retain the complete left and right states.
+
+## Keyboard translation semantics
+
+M2 supports an explicitly selected active view for keyboard adjustment.
+
+When focus is not inside a form control:
+
+```text
+Arrow key       = 1 px
+Alt + Arrow     = 0.1 px
+Shift + Arrow   = 10 px
+```
+
+Left/right arrows change `offsetX`; up/down arrows change `offsetY`. Keyboard edits obey the current independent/symmetric adjustment mode exactly like slider and numeric edits.
 
 ## Future affine extensions
 
